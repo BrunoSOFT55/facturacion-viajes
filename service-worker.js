@@ -1,10 +1,12 @@
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("altamirano-cache").then(cache => {
+    caches.open("viajes-v1").then(cache => {
       return cache.addAll([
         "./",
         "./index.html",
-        "./manifest.json"
+        "./logo.png",
+        "./icon-192.png",
+        "./icon-512.png"
       ]);
     })
   );
