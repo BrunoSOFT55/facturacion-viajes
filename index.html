@@ -36,6 +36,73 @@ body{background:#dde3ee;font-family:'Segoe UI',sans-serif;}
 .encabezado{flex-direction:column;text-align:center}
 .marca{font-size:18px}
 }
+
+/* ================== MOBILE ULTRA RESPONSIVE ================== */
+@media (max-width: 480px){
+
+.factura-box{
+ padding:18px;
+ border-radius:10px;
+}
+
+.encabezado img{
+ max-width:160px;
+ margin:0 auto 10px;
+ display:block;
+}
+
+.encabezado{
+ gap:10px;
+}
+
+.marca{
+ font-size:17px;
+}
+
+.factura-titulo{
+ font-size:14px;
+}
+
+h5{
+ font-size:15px;
+ margin-top:14px;
+}
+
+input,button{
+ font-size:14px!important;
+}
+
+.row.g-2>div{
+ width:100%!important;
+}
+
+.table th,.table td{
+ font-size:13px;
+ padding:6px;
+}
+
+.total-box{
+ font-size:18px;
+ padding:12px;
+ margin-top:10px;
+}
+
+.no-print button{
+ padding:10px;
+ font-size:14px;
+}
+
+footer{
+ font-size:12px;
+ padding:14px 10px;
+}
+
+footer h6{
+ font-size:14px;
+}
+
+}
+
 </style>
 </head>
 
@@ -179,6 +246,7 @@ if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker
 
 </body>
 </html>
+
 
 
 
