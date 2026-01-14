@@ -32,6 +32,59 @@ body{background:#dde3ee;font-family:'Segoe UI',sans-serif;}
 .btn-success:hover{background:var(--azul2)}
 .no-print{}
 @media print{body{background:#fff}.no-print{display:none!important}}
+
+ /* Tablets */
+@media (max-width: 992px) {
+  .factura-box {
+    padding: 28px;
+  }
+  .marca {font-size: 20px;}
+  .total-box {font-size: 20px;}
+}
+
+/* Celulares */
+@media (max-width: 576px) {
+
+  .encabezado{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:12px;
+  }
+
+  .encabezado img{
+    max-height:70px;
+  }
+
+  .marca{font-size:18px}
+  .factura-titulo{font-size:14px}
+
+  .row.g-2 > div{
+    flex:0 0 100%;
+    max-width:100%;
+  }
+
+  h5{
+    margin-top:18px;
+    font-size:16px;
+  }
+
+  .table th,.table td{
+    font-size:13px;
+    padding:6px;
+  }
+
+  .total-box{
+    font-size:18px;
+    padding:14px;
+  }
+
+  .btn{
+    font-size:14px;
+    padding:10px;
+  }
+}
+
 </style>
 </head>
 
@@ -113,4 +166,5 @@ function guardarHistorial(){
 
 </body>
 </html>
+
 
