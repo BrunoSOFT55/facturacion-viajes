@@ -41,10 +41,93 @@ body{background:#dde3ee;font-family:'Segoe UI',sans-serif;}
 .encabezado{flex-direction:column;text-align:center}
 .marca{font-size:18px}
 }
+
+/* ================= MOBILE APP MODE ================= */
+.mobile-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:55px;
+  background:#0b1f3a;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  z-index:9999;
+}
+
+@media (max-width:576px){
+
+body{
+ padding-top:65px;
+}
+
+.factura-box{
+ padding:20px;
+ border-radius:0;
+ margin:0;
+}
+
+.encabezado{
+ flex-direction:column;
+ align-items:center;
+ text-align:center;
+ gap:10px;
+}
+
+.encabezado img{
+ max-height:70px;
+}
+
+.total-box{
+ font-size:20px;
+ text-align:center;
+}
+
+.row.g-2 > div{
+ width:100% !important;
+}
+
+.no-print{
+ display:block;
+}
+
+table{
+ font-size:13px;
+}
+
+footer{
+ font-size:12px;
+ padding:15px;
+}
+
+.btn{
+ width:100%;
+}
+}
+.mobile-actions{
+ position:fixed;
+ bottom:0;
+ left:0;
+ width:100%;
+ background:white;
+ padding:10px;
+ display:flex;
+ gap:10px;
+ z-index:9999;
+ box-shadow:0 -5px 15px rgba(0,0,0,.15);
+}
+
+ 
 </style>
 </head>
 
 <body>
+<div class="mobile-bar d-md-none">
+  <span>Altamirano Nosiglia Viajes</span>
+</div>
 
 <div class="container mt-4">
 <div class="factura-box">
@@ -182,7 +265,13 @@ window.onload=cargarHistorial;
 if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js')}
 </script>
 
+ <div class="mobile-actions d-md-none">
+  <button onclick="agregar()" class="btn btn-success">➕ Agregar</button>
+  <button onclick="window.print()" class="btn btn-primary">🖨 Imprimir</button>
+</div>
+
 </body>
 
 </html>
+
 
