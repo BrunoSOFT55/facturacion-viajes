@@ -36,6 +36,61 @@ body{background:#dde3ee;font-family:'Segoe UI',sans-serif;}
 .encabezado{flex-direction:column;text-align:center}
 .marca{font-size:18px}
 }
+
+/* Ajustes responsive adicionales */
+@media (max-width: 768px) {
+  .factura-box {
+    padding: 20px;
+  }
+
+  .encabezado {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .encabezado img {
+    max-height: 70px;
+    margin-bottom: 10px;
+  }
+
+  .marca {
+    font-size: 20px;
+  }
+
+  .sub, .factura-titulo {
+    font-size: 12px;
+  }
+
+  .fila.g-2 > [class*="col-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .total-box {
+    font-size: 20px;
+    padding: 12px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  #buscar {
+    font-size: 12px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
 </style>
 </head>
 
@@ -178,4 +233,5 @@ if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker
 </script>
 
 </body>
+
 </html>
