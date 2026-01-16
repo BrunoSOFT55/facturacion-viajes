@@ -14,7 +14,6 @@
 :root{
  --azul:#0b1f3a;
  --azul2:#162f5f;
- --gris:#f3f5f8;
 }
 
 body{
@@ -41,9 +40,7 @@ body{
  margin-bottom:30px;
 }
 
-.encabezado img{
- max-height:90px;
-}
+.encabezado img{max-height:90px}
 
 .marca{
  font-size:24px;
@@ -51,10 +48,7 @@ body{
  color:var(--azul);
 }
 
-.sub{
- font-size:13px;
- color:#666;
-}
+.sub{font-size:13px;color:#666}
 
 .total-box{
  background:#f3f5f8;
@@ -67,14 +61,26 @@ body{
  margin-top:20px;
 }
 
+/* BOTONES */
+.acciones{
+ display:flex;
+ gap:10px;
+ justify-content:flex-end;
+ flex-wrap:wrap;
+}
+
 @media (max-width:768px){
  .factura-box{padding:20px}
  .encabezado{flex-direction:column;text-align:center}
+ .acciones{
+  flex-direction:column;
+ }
 }
 
+/* IMPRESIÓN */
 @media print{
  body{background:#fff}
- .no-print, footer, #historialBox{display:none!important}
+ .no-print, footer, #historialBox, #tablaCarga{display:none!important}
  .factura-box{
   box-shadow:none;
   border:none;
@@ -104,19 +110,35 @@ body{
     </div>
   </div>
 
-  <div class="row g-3 mb-3 no-print">
-    <div class="col-md-8">
-      <input type="text" id="desc" class="form-control" placeholder="Detalle">
+  <!-- CARGA DETALLE -->
+  <div id="tablaCarga" class="no-print">
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-8">
+        <input type="text" id="desc" class="form-control" placeholder="Detalle">
+      </div>
+      <div class="col-md-4">
+        <input type="number" id="precio" class="form-control" placeholder="Importe">
+      </div>
     </div>
-    <div class="col-md-4">
-      <input type="number" id="precio" class="form-control" placeholder="Importe">
-    </div>
+
+    <button onclick="agregar()" class="btn btn-primary mb-3">
+      Agregar
+    </button>
+
+    <table class="table table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Detalle</th>
+          <th class="text-end">Importe</th>
+        </tr>
+      </thead>
+      <tbody id="tabla"></tbody>
+    </table>
+
   </div>
 
-  <button onclick="agregar()" class="btn btn-primary mb-3 no-print">
-    Agregar
-  </button>
-
+  <!-- TABLA FINAL SOLO PARA IMPRESIÓN -->
   <table class="table table-bordered">
     <thead class="table-dark">
       <tr>
@@ -124,7 +146,7 @@ body{
         <th class="text-end">Importe</th>
       </tr>
     </thead>
-    <tbody id="tabla"></tbody>
+    <tbody id="tablaPrint"></tbody>
   </table>
 
   <div class="total-box text-end">
@@ -132,16 +154,20 @@ body{
   </div>
 
   <!-- BOTONES -->
-  <div class="text-end mt-4 no-print">
-    <button onclick="nuevaFactura()" class="btn btn-outline-danger me-2">
+  <div class="acciones mt-4 no-print">
+    <button onclick="nuevaFactura()" class="btn btn-outline-danger">
       Nueva Factura
     </button>
 
-    <button onclick="guardarHistorial()" class="btn btn-secondary me-2">
+    <button onclick="guardarHistorial()" class="btn btn-secondary">
       Guardar Historial
     </button>
 
-    <button onclick="irAPresupuesto()" class="btn btn-outline-primary me-2">
+    <button onclick="enviarWhats()" class="btn btn-outline-success">
+      Enviar WhatsApp
+    </button>
+
+    <button onclick="irAPresupuesto()" class="btn btn-outline-primary">
       Ir a Presupuesto
     </button>
 
@@ -150,7 +176,7 @@ body{
     </button>
   </div>
 
-  <!-- BUSCAR HISTORIAL -->
+  <!-- HISTORIAL -->
   <div id="historialBox" class="mt-5 no-print">
     <input type="text" id="buscar" class="form-control mb-2"
       placeholder="Buscar comprobantes..."
@@ -190,12 +216,16 @@ function agregar(){
  let p = parseFloat(precio.value);
  total += p;
 
- tabla.innerHTML += `
+ let fila = `
   <tr>
    <td>${desc.value}</td>
    <td class="text-end">$ ${p.toFixed(2)}</td>
   </tr>
  `;
+
+ tabla.innerHTML += fila;
+ tablaPrint.innerHTML += fila;
+
  document.getElementById("total").innerText = total.toFixed(2);
  desc.value="";
  precio.value="";
@@ -205,27 +235,33 @@ function nuevaFactura(){
  if(!confirm("¿Desea iniciar una nueva factura?")) return;
  cliente.value="";
  fecha.value="";
- desc.value="";
- precio.value="";
  tabla.innerHTML="";
+ tablaPrint.innerHTML="";
  total=0;
  document.getElementById("total").innerText="0.00";
 }
 
+function enviarWhats(){
+ let msg = `Hola ${cliente.value}
+Fecha: ${fecha.value}
+Total: $ ${total.toFixed(2)}`;
+ window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+
 function guardarHistorial(){
- let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ let hist = JSON.parse(localStorage.getItem("historial")||"[]");
  hist.push({
-  cliente: cliente.value,
-  fecha: fecha.value,
-  total: total.toFixed(2)
+  cliente:cliente.value,
+  fecha:fecha.value,
+  total:total.toFixed(2)
  });
- localStorage.setItem("historial", JSON.stringify(hist));
+ localStorage.setItem("historial",JSON.stringify(hist));
  alert("Comprobante guardado");
  cargarHistorial();
 }
 
 function cargarHistorial(){
- let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ let hist = JSON.parse(localStorage.getItem("historial")||"[]");
  let tbody = document.querySelector("#tablaHistorial tbody");
  tbody.innerHTML="";
  hist.reverse().forEach(h=>{
@@ -234,21 +270,15 @@ function cargarHistorial(){
     <td>${h.fecha}</td>
     <td>${h.cliente}</td>
     <td class="text-end">$ ${h.total}</td>
-   </tr>
-  `;
+   </tr>`;
  });
 }
 
 function filtrarHistorial(){
  let q = buscar.value.toLowerCase();
- let tablaH = document.getElementById("tablaHistorial");
-
- if(q===""){
-  tablaH.classList.add("d-none");
-  return;
- }
- tablaH.classList.remove("d-none");
-
+ let t = document.getElementById("tablaHistorial");
+ if(q===""){t.classList.add("d-none");return;}
+ t.classList.remove("d-none");
  document.querySelectorAll("#tablaHistorial tbody tr").forEach(f=>{
   f.style.display = f.innerText.toLowerCase().includes(q) ? "" : "none";
  });
@@ -263,6 +293,8 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
+
 
 
 
