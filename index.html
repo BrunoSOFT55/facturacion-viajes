@@ -16,169 +16,190 @@
  --azul2:#162f5f;
  --gris:#f3f5f8;
 }
-body{background:#dde3ee;font-family:'Segoe UI',sans-serif;}
-.factura-box{max-width:950px;margin:auto;background:#fff;padding:40px;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.18);border-top:12px solid var(--azul);}
-.encabezado{display:flex;justify-content:space-between;border-bottom:2px solid var(--azul);padding-bottom:18px;margin-bottom:30px;}
-.encabezado img{max-height:90px}
-.marca{font-size:24px;font-weight:800;color:var(--azul);}
-.sub{font-size:13px;color:#666}
-.factura-titulo{color:var(--azul2);font-weight:700}
-.table thead{background:var(--azul2);color:#fff}
-.total-box{background:#f3f5f8;border:2px solid var(--azul2);padding:18px;border-radius:10px;font-size:24px;font-weight:800;color:var(--azul2)}
-.btn-success{background:var(--azul);border:none}
-.btn-success:hover{background:var(--azul2)}
-.no-print{}
+body{
+ background:#dde3ee;
+ font-family:'Segoe UI',sans-serif;
+}
+.factura-box{
+ max-width:950px;
+ margin:auto;
+ background:#fff;
+ padding:40px;
+ border-radius:14px;
+ box-shadow:0 18px 40px rgba(0,0,0,.18);
+ border-top:12px solid var(--azul);
+}
+.encabezado{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ border-bottom:2px solid var(--azul);
+ padding-bottom:18px;
+ margin-bottom:30px;
+}
+.encabezado img{
+ max-height:90px;
+}
+.marca{
+ font-size:24px;
+ font-weight:800;
+ color:var(--azul);
+}
+.sub{
+ font-size:13px;
+ color:#666;
+}
+.table thead{
+ background:var(--azul2);
+ color:#fff;
+}
+.total-box{
+ background:#f3f5f8;
+ border:2px solid var(--azul2);
+ padding:18px;
+ border-radius:10px;
+ font-size:24px;
+ font-weight:800;
+ color:var(--azul2);
+}
+.btn-success{
+ background:var(--azul);
+ border:none;
+}
+.btn-success:hover{
+ background:var(--azul2);
+}
 @media print{
  body{background:#fff}
  .no-print,#tablaHistorial,#buscar,h5.mt-4,footer{display:none!important}
 }
 @media (max-width:576px){
-.encabezado{flex-direction:column;text-align:center}
-.marca{font-size:18px}
+ .encabezado{flex-direction:column;text-align:center}
+ .encabezado img{margin-bottom:10px}
+ .marca{font-size:18px}
 }
-
-/* Ajustes responsive adicionales */
-@media (max-width: 768px) {
-  .factura-box {
-    padding: 20px;
-  }
-
-  .encabezado {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .encabezado img {
-    max-height: 70px;
-    margin-bottom: 10px;
-  }
-
-  .marca {
-    font-size: 20px;
-  }
-
-  .sub, .factura-titulo {
-    font-size: 12px;
-  }
-
-  .fila.g-2 > [class*="col-"] {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-  .total-box {
-    font-size: 20px;
-    padding: 12px;
-  }
-
-  .btn {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-
-  table {
-    font-size: 12px;
-  }
-
-  #buscar {
-    font-size: 12px;
-  }
-
-  footer {
-    text-align: center;
-    font-size: 12px;
-  }
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="container mt-4">
 <div class="factura-box">
 
+<!-- ENCABEZADO -->
 <div class="encabezado">
-<img src="logo.png">
-<div class="text-end">
-<div class="marca">ALTAMIRANO NOSIGLIA VIAJES</div>
-<div class="sub">Solari – Corrientes</div>
-<div class="factura-titulo">COMPROBANTE DE SERVICIO</div>
-<input type="date" id="fecha" class="form-control form-control-sm mt-2 no-print">
-</div>
+  <div class="d-flex align-items-center gap-3">
+    <!-- LOGO RESTAURADO -->
+    <img src="img/logo.png" alt="Altamirano Nosiglia Viajes">
+
+    <div>
+      <div class="marca">Altamirano Nosiglia Viajes</div>
+      <div class="sub">Comprobante de Servicio</div>
+    </div>
+  </div>
+
+  <!-- BOTÓN PRESUPUESTOS -->
+  <div class="no-print">
+    <button onclick="irAPresupuesto()" class="btn btn-outline-primary">
+      Presupuestos
+    </button>
+  </div>
 </div>
 
-<h5>Datos del Cliente</h5>
-<div class="row g-2">
-<div class="col-md-5"><input id="cliente" class="form-control" placeholder="Nombre y Apellido"></div>
-<div class="col-md-3"><input id="dni" class="form-control" placeholder="DNI / CUIT"></div>
-<div class="col-md-2"><input id="telefono" class="form-control" placeholder="Teléfono"></div>
+<!-- DATOS -->
+<div class="row g-2 mb-3">
+  <div class="col-md-4">
+    <input id="cliente" class="form-control" placeholder="Cliente">
+  </div>
+  <div class="col-md-4">
+    <input id="telefono" class="form-control" placeholder="Teléfono">
+  </div>
+  <div class="col-md-4">
+    <input id="fecha" type="date" class="form-control">
+  </div>
 </div>
 
-<h5 class="mt-3">Detalle del Servicio</h5>
-<div class="row g-2 mb-3 no-print">
-<div class="col-md-6"><input id="desc" class="form-control" placeholder="Detalle del servicio"></div>
-<div class="col-md-3"><input id="precio" type="number" class="form-control" placeholder="Importe"></div>
-<div class="col-md-3 d-grid gap-2">
-<button onclick="agregar()" class="btn btn-success">Agregar</button>
-<button onclick="enviarWhats()" class="btn btn-outline-primary">Enviar WhatsApp</button>
+<div class="row g-2 mb-3">
+  <div class="col-md-8">
+    <input id="desc" class="form-control" placeholder="Detalle">
+  </div>
+  <div class="col-md-4">
+    <input id="precio" type="number" class="form-control" placeholder="Importe">
+  </div>
 </div>
+
+<div class="mb-3 no-print">
+  <button onclick="agregar()" class="btn btn-success">Agregar</button>
+  <button onclick="enviarWhats()" class="btn btn-outline-primary">Enviar WhatsApp</button>
 </div>
 
 <table class="table table-bordered" id="tabla">
-<thead><tr><th>Detalle</th><th class="text-end">Importe</th></tr></thead>
-<tbody></tbody>
+  <thead>
+    <tr>
+      <th>Detalle</th>
+      <th class="text-end">Importe</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
 </table>
 
-<div class="total-box text-end">TOTAL $ <span id="total">0.00</span></div>
+<div class="total-box text-end">
+ TOTAL $ <span id="total">0.00</span>
+</div>
 
 <h5 class="mt-4">Historial de Comprobantes</h5>
 <input type="text" id="buscar" onkeyup="filtrarHistorial()" class="form-control mb-2 no-print" placeholder="Buscar por cliente o fecha...">
 
 <table class="table table-sm table-bordered d-none" id="tablaHistorial">
-<thead><tr><th>Fecha</th><th>Cliente</th><th class="text-end">Total</th></tr></thead>
-<tbody></tbody>
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Cliente</th>
+      <th class="text-end">Total</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
 </table>
 
 <div class="text-end mt-4 no-print">
-<button onclick="nuevaFactura()" class="btn btn-outline-danger me-2">Nueva Factura</button>
-<button onclick="guardarHistorial()" class="btn btn-secondary">Guardar Historial</button>
-<button onclick="window.print()" class="btn btn-success">Imprimir / PDF</button>
+  <button onclick="nuevaFactura()" class="btn btn-outline-danger me-2">Nueva Factura</button>
+  <button onclick="guardarHistorial()" class="btn btn-secondary me-2">Guardar Historial</button>
+  <button onclick="window.print()" class="btn btn-success">Imprimir / PDF</button>
 </div>
 
 </div>
-</div>
 
-<footer class="bg-dark text-white text-center py-4 mt-5 border-top border-secondary">
-    <div class="container">
-        <h6 class="mb-1">Rodríguez Bruno</h6>
-        <small class="text-secondary">
-            Técnico en Desarrollo de Software<br>
-            Sistemas Web · Apps · Soluciones Digitales
-        </small>
-    </div>
+<footer class="bg-dark text-white text-center py-4 mt-5">
+  <h6 class="mb-1">Rodríguez Bruno</h6>
+  <small class="text-secondary">
+    Técnico en Desarrollo de Software<br>
+    Sistemas Web · Apps · Soluciones Digitales
+  </small>
 </footer>
 
 <script>
-let total=0;
+let total = 0;
+
+function irAPresupuesto(){
+ window.location.href = "presupuesto.html";
+}
 
 function agregar(){
- if(!desc.value||!precio.value)return;
- let p=parseFloat(precio.value);
- total+=p;
- tabla.querySelector("tbody").innerHTML+=`<tr><td>${desc.value}</td><td class='text-end'>$${p.toFixed(2)}</td></tr>`;
- document.getElementById("total").innerText=total.toFixed(2);
- desc.value="";precio.value="";
+ if(!desc.value || !precio.value) return;
+ let p = parseFloat(precio.value);
+ total += p;
+ tabla.querySelector("tbody").innerHTML +=
+ `<tr><td>${desc.value}</td><td class="text-end">$ ${p.toFixed(2)}</td></tr>`;
+ document.getElementById("total").innerText = total.toFixed(2);
+ desc.value=""; precio.value="";
 }
 
 function enviarWhats(){
- let msg=`Hola ${cliente.value}, te enviamos tu comprobante.\nFecha: ${fecha.value}\nTotal: $${total.toFixed(2)}`;
+ let msg = `Hola ${cliente.value}, te enviamos tu comprobante.\nFecha: ${fecha.value}\nTotal: $ ${total.toFixed(2)}`;
  window.open("https://wa.me/54"+telefono.value+"?text="+encodeURIComponent(msg));
 }
 
 function guardarHistorial(){
- let hist=JSON.parse(localStorage.getItem("historial")||"[]");
+ let hist = JSON.parse(localStorage.getItem("historial")||"[]");
  hist.push({cliente:cliente.value,fecha:fecha.value,total:total.toFixed(2)});
  localStorage.setItem("historial",JSON.stringify(hist));
  cargarHistorial();
@@ -186,52 +207,44 @@ function guardarHistorial(){
 }
 
 function cargarHistorial(){
- let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ let hist = JSON.parse(localStorage.getItem("historial")||"[]");
  let tbody = document.querySelector("#tablaHistorial tbody");
- tbody.innerHTML = "";
-
- hist.reverse().forEach(h => {
-   tbody.innerHTML += `
-    <tr>
-      <td>${h.fecha}</td>
-      <td>${h.cliente}</td>
-      <td class="text-end">$${h.total}</td>
-    </tr>`;
+ tbody.innerHTML="";
+ hist.reverse().forEach(h=>{
+  tbody.innerHTML+=`
+   <tr>
+    <td>${h.fecha}</td>
+    <td>${h.cliente}</td>
+    <td class="text-end">$ ${h.total}</td>
+   </tr>`;
  });
 }
-
 
 function filtrarHistorial(){
  let q = buscar.value.toLowerCase();
- let tabla = document.getElementById("tablaHistorial");
-
- if(q === ""){
-   tabla.classList.add("d-none");
-   return;
- }
-
- tabla.classList.remove("d-none");
-
- document.querySelectorAll("#tablaHistorial tbody tr").forEach(fila=>{
-   fila.style.display = fila.innerText.toLowerCase().includes(q) ? "" : "none";
+ let t = document.getElementById("tablaHistorial");
+ if(q===""){ t.classList.add("d-none"); return; }
+ t.classList.remove("d-none");
+ document.querySelectorAll("#tablaHistorial tbody tr").forEach(f=>{
+  f.style.display = f.innerText.toLowerCase().includes(q) ? "" : "none";
  });
 }
 
-
 function nuevaFactura(){
- if(!confirm("¿Desea iniciar una nueva factura? Se borrarán los datos actuales."))return;
- cliente.value="";dni.value="";telefono.value="";desc.value="";precio.value="";fecha.value="";
+ if(!confirm("¿Desea iniciar una nueva factura?")) return;
+ cliente.value=""; telefono.value=""; desc.value=""; precio.value=""; fecha.value="";
  tabla.querySelector("tbody").innerHTML="";
- total=0;document.getElementById("total").innerText="0.00";
+ total=0; document.getElementById("total").innerText="0.00";
 }
 
-window.onload=cargarHistorial;
+window.onload = cargarHistorial;
 </script>
 
 <script>
-if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js')}
+if('serviceWorker' in navigator){
+ navigator.serviceWorker.register('service-worker.js');
+}
 </script>
 
 </body>
-
 </html>
