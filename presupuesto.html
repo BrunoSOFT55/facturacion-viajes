@@ -17,7 +17,6 @@ body{
   font-family:'Segoe UI',sans-serif;
 }
 
-/* Documento en pantalla */
 .documento{
   max-width:900px;
   margin:20px auto;
@@ -26,7 +25,7 @@ body{
 }
 
 /* Encabezado */
-.header-img img{
+.encabezado-img img{
   width:100%;
   display:block;
 }
@@ -42,20 +41,32 @@ input, textarea{
   border:1px solid #ccc;
 }
 
+/* ========= BOTONES MEJORADOS ========= */
+.acciones{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.acciones .btn{
+  min-width:220px;
+  padding:12px 18px;
+  font-weight:600;
+  font-size:15px;
+}
+
 /* ========= CONFIGURACIÓN A4 ========= */
 @page{
-  size: A4;
-  margin: 2.5cm 2.5cm 2.5cm 2.5cm;
+  size:A4;
+  margin:2.5cm;
 }
 
 /* ========= MODO IMPRESIÓN ========= */
 @media print{
-  body{
-    background:#fff;
-  }
+  body{background:#fff}
 
   .documento{
-    width:100%;
     max-width:100%;
     margin:0;
     box-shadow:none;
@@ -67,20 +78,13 @@ input, textarea{
     line-height:1.6;
   }
 
-  .btn-imprimir,
-  .btn-volver{
+  .btn-imprimir{
     display:none;
   }
 
-  textarea{
+  textarea, input{
     border:none;
     resize:none;
-    text-align:justify;
-    padding:0;
-  }
-
-  input{
-    border:none;
     padding:0;
   }
 }
@@ -91,7 +95,7 @@ input, textarea{
 
 <div class="documento">
 
-  <div class="header-img">
+  <div class="encabezado-img">
     <img src="solapa.jpg" alt="Altamirano Nosiglia Viajes">
   </div>
 
@@ -123,13 +127,13 @@ input, textarea{
     </p>
 
     <!-- BOTONES -->
-    <div class="text-center mt-4 btn-imprimir">
-      <button onclick="window.location.href='index.html'" class="btn btn-outline-secondary me-2 btn-volver">
+    <div class="btn-imprimir acciones mt-4">
+      <button onclick="window.location.href='index.html'" class="btn btn-outline-secondary">
         ← Volver a Comprobantes
       </button>
 
       <button onclick="window.print()" class="btn btn-primary">
-        Imprimir Presupuesto
+        🖨 Imprimir Presupuesto
       </button>
     </div>
 
@@ -138,13 +142,14 @@ input, textarea{
 
 <!-- SERVICE WORKER -->
 <script>
-if ('serviceWorker' in navigator) {
+if('serviceWorker' in navigator){
   navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
 </body>
 </html>
+
 
 
 
