@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Presupuesto - Altamirano Nosiglia Viajes</title>
+<title>Comprobante de Servicio - Altamirano Nosiglia Viajes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1f3a">
@@ -72,28 +72,14 @@ body{
  background:var(--azul);
  border:none;
 }
-
 .btn-success:hover{
  background:var(--azul2);
 }
 
 @media (max-width:768px){
- .factura-box{
-  padding:20px;
- }
- .encabezado{
-  flex-direction:column;
-  text-align:center;
- }
- .encabezado img{
-  max-height:70px;
- }
- .marca{
-  font-size:20px;
- }
- .total-box{
-  font-size:20px;
- }
+ .factura-box{padding:20px}
+ .encabezado{flex-direction:column;text-align:center}
+ .encabezado img{max-height:70px}
  .acciones{
   display:flex;
   flex-direction:column;
@@ -116,7 +102,7 @@ body{
     <div>
       <img src="logo.png" alt="Logo">
       <div class="marca">Altamirano Nosiglia Viajes</div>
-      <div class="sub">Presupuesto</div>
+      <div class="sub">Comprobante de Servicio</div>
     </div>
   </div>
 
@@ -128,7 +114,7 @@ body{
       <input type="tel" id="telefono" class="form-control" placeholder="Teléfono">
     </div>
     <div class="col-md-4">
-      <input type="date" id="fecha" class="form-control" placeholder="Fecha del presupuesto">
+      <input type="date" id="fecha" class="form-control" placeholder="Fecha del comprobante">
     </div>
   </div>
 
@@ -150,7 +136,7 @@ body{
         <th class="text-end">Importe</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="tabla"></tbody>
   </table>
 
   <div class="total-box text-end">
@@ -158,8 +144,8 @@ body{
   </div>
 
   <div class="text-end mt-4 no-print acciones">
-    <button onclick="window.location.href='index.html'" class="btn btn-outline-primary me-2">
-      Volver a Comprobantes
+    <button onclick="irAPresupuesto()" class="btn btn-outline-primary me-2">
+      Ir a Presupuesto
     </button>
     <button onclick="window.print()" class="btn btn-success">
       Imprimir / PDF
@@ -179,12 +165,16 @@ body{
 <script>
 let total = 0;
 
+function irAPresupuesto(){
+ window.location.href = "presupuesto.html";
+}
+
 function agregar(){
  if(!desc.value || !precio.value) return;
  let p = parseFloat(precio.value);
  total += p;
 
- document.querySelector("tbody").innerHTML += `
+ document.getElementById("tabla").innerHTML += `
   <tr>
    <td>${desc.value}</td>
    <td class="text-end">$ ${p.toFixed(2)}</td>
@@ -202,4 +192,3 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
-
