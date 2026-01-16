@@ -34,12 +34,11 @@ body{
 
 .encabezado{
  display:flex;
- justify-content:space-between;
  align-items:center;
+ gap:15px;
  border-bottom:2px solid var(--azul);
  padding-bottom:18px;
  margin-bottom:30px;
- gap:15px;
 }
 
 .encabezado img{
@@ -68,28 +67,18 @@ body{
  margin-top:20px;
 }
 
-.btn-success{
- background:var(--azul);
- border:none;
-}
-.btn-success:hover{
- background:var(--azul2);
-}
-
 @media (max-width:768px){
  .factura-box{padding:20px}
  .encabezado{flex-direction:column;text-align:center}
- .encabezado img{max-height:70px}
- .acciones{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
- }
 }
 
 @media print{
  body{background:#fff}
- .no-print, footer{display:none!important}
+ .no-print, footer, #historialBox{display:none!important}
+ .factura-box{
+  box-shadow:none;
+  border:none;
+ }
 }
 </style>
 </head>
@@ -99,26 +88,23 @@ body{
 <div class="factura-box">
 
   <div class="encabezado">
+    <img src="logo.png" alt="Logo">
     <div>
-      <img src="logo.png" alt="Logo">
       <div class="marca">Altamirano Nosiglia Viajes</div>
       <div class="sub">Comprobante de Servicio</div>
     </div>
   </div>
 
   <div class="row g-3 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <input type="text" id="cliente" class="form-control" placeholder="Cliente">
     </div>
-    <div class="col-md-4">
-      <input type="tel" id="telefono" class="form-control" placeholder="Teléfono">
-    </div>
-    <div class="col-md-4">
-      <input type="date" id="fecha" class="form-control" placeholder="Fecha">
+    <div class="col-md-3">
+      <input type="date" id="fecha" class="form-control">
     </div>
   </div>
 
-  <div class="row g-3 mb-3">
+  <div class="row g-3 mb-3 no-print">
     <div class="col-md-8">
       <input type="text" id="desc" class="form-control" placeholder="Detalle">
     </div>
@@ -146,18 +132,40 @@ body{
   </div>
 
   <!-- BOTONES -->
-  <div class="text-end mt-4 no-print acciones">
-    <button onclick="nuevaFactura()" class="btn btn-outline-danger">
+  <div class="text-end mt-4 no-print">
+    <button onclick="nuevaFactura()" class="btn btn-outline-danger me-2">
       Nueva Factura
     </button>
 
-    <button onclick="irAPresupuesto()" class="btn btn-outline-primary">
+    <button onclick="guardarHistorial()" class="btn btn-secondary me-2">
+      Guardar Historial
+    </button>
+
+    <button onclick="irAPresupuesto()" class="btn btn-outline-primary me-2">
       Ir a Presupuesto
     </button>
 
     <button onclick="window.print()" class="btn btn-success">
       Imprimir / PDF
     </button>
+  </div>
+
+  <!-- BUSCAR HISTORIAL -->
+  <div id="historialBox" class="mt-5 no-print">
+    <input type="text" id="buscar" class="form-control mb-2"
+      placeholder="Buscar comprobantes..."
+      onkeyup="filtrarHistorial()">
+
+    <table class="table table-sm table-bordered d-none" id="tablaHistorial">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th class="text-end">Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
 </div>
@@ -182,7 +190,7 @@ function agregar(){
  let p = parseFloat(precio.value);
  total += p;
 
- document.getElementById("tabla").innerHTML += `
+ tabla.innerHTML += `
   <tr>
    <td>${desc.value}</td>
    <td class="text-end">$ ${p.toFixed(2)}</td>
@@ -196,14 +204,57 @@ function agregar(){
 function nuevaFactura(){
  if(!confirm("¿Desea iniciar una nueva factura?")) return;
  cliente.value="";
- telefono.value="";
  fecha.value="";
  desc.value="";
  precio.value="";
- document.getElementById("tabla").innerHTML="";
+ tabla.innerHTML="";
  total=0;
  document.getElementById("total").innerText="0.00";
 }
+
+function guardarHistorial(){
+ let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ hist.push({
+  cliente: cliente.value,
+  fecha: fecha.value,
+  total: total.toFixed(2)
+ });
+ localStorage.setItem("historial", JSON.stringify(hist));
+ alert("Comprobante guardado");
+ cargarHistorial();
+}
+
+function cargarHistorial(){
+ let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ let tbody = document.querySelector("#tablaHistorial tbody");
+ tbody.innerHTML="";
+ hist.reverse().forEach(h=>{
+  tbody.innerHTML += `
+   <tr>
+    <td>${h.fecha}</td>
+    <td>${h.cliente}</td>
+    <td class="text-end">$ ${h.total}</td>
+   </tr>
+  `;
+ });
+}
+
+function filtrarHistorial(){
+ let q = buscar.value.toLowerCase();
+ let tablaH = document.getElementById("tablaHistorial");
+
+ if(q===""){
+  tablaH.classList.add("d-none");
+  return;
+ }
+ tablaH.classList.remove("d-none");
+
+ document.querySelectorAll("#tablaHistorial tbody tr").forEach(f=>{
+  f.style.display = f.innerText.toLowerCase().includes(q) ? "" : "none";
+ });
+}
+
+window.onload = cargarHistorial;
 
 if('serviceWorker' in navigator){
  navigator.serviceWorker.register('service-worker.js');
@@ -212,5 +263,6 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
 
 
