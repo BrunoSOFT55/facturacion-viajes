@@ -81,6 +81,39 @@ body{
   border:none;
  }
 }
+
+ /* MEJORA VISUAL MOBILE */
+@media (max-width: 576px){
+
+ .acciones{
+  flex-direction: column;
+  gap:12px;
+ }
+
+ .acciones button{
+  width:100%;
+  font-size:16px;
+  padding:14px;
+  border-radius:10px;
+ }
+
+ .total-box{
+  font-size:22px;
+  text-align:center;
+ }
+
+ .table th,
+ .table td{
+  font-size:14px;
+ }
+
+ input.form-control{
+  font-size:16px;
+  padding:12px;
+ }
+}
+
+ 
 </style>
 </head>
 
@@ -286,3 +319,4 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
