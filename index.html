@@ -73,47 +73,21 @@ body{
  .encabezado{flex-direction:column;text-align:center}
 }
 
-@media print{
- body{background:#fff}
- .no-print, footer, #historialBox{display:none!important}
- .factura-box{
-  box-shadow:none;
-  border:none;
- }
-}
-
- /* MEJORA VISUAL MOBILE */
-@media (max-width: 576px){
-
- .acciones{
-  flex-direction: column;
-  gap:12px;
- }
-
+@media (max-width:576px){
+ .acciones{flex-direction:column;gap:12px}
  .acciones button{
   width:100%;
   font-size:16px;
   padding:14px;
   border-radius:10px;
  }
-
- .total-box{
-  font-size:22px;
-  text-align:center;
- }
-
- .table th,
- .table td{
-  font-size:14px;
- }
-
- input.form-control{
-  font-size:16px;
-  padding:12px;
- }
 }
 
- 
+@media print{
+ body{background:#fff}
+ .no-print, footer, #historialBox{display:none!important}
+ .factura-box{box-shadow:none;border:none}
+}
 </style>
 </head>
 
@@ -121,16 +95,14 @@ body{
 
 <div class="factura-box">
 
-  <!-- ENCABEZADO -->
   <div class="encabezado">
-    <img src="logo.png" alt="Logo">
+    <img src="logo.png">
     <div>
       <div class="marca">Altamirano Nosiglia Viajes</div>
       <div class="sub">Comprobante de Servicio</div>
     </div>
   </div>
 
-  <!-- DATOS -->
   <div class="row g-3 mb-4">
     <div class="col-md-6">
       <input type="text" id="cliente" class="form-control" placeholder="Cliente">
@@ -140,7 +112,6 @@ body{
     </div>
   </div>
 
-  <!-- CARGA DETALLE -->
   <div id="tablaCarga" class="no-print">
     <div class="row g-3 mb-3">
       <div class="col-md-8">
@@ -151,12 +122,9 @@ body{
       </div>
     </div>
 
-    <button onclick="agregar()" class="btn btn-primary mb-3">
-      Agregar
-    </button>
+    <button onclick="agregar()" class="btn btn-primary mb-3">Agregar</button>
   </div>
 
-  <!-- TABLA DETALLE -->
   <table class="table table-bordered mt-4">
     <thead class="table-light">
       <tr>
@@ -167,32 +135,16 @@ body{
     <tbody id="tablaDetalle"></tbody>
   </table>
 
-  <!-- TOTAL -->
   <div class="total-box text-end">
     TOTAL $ <span id="total">0.00</span>
   </div>
 
-  <!-- BOTONES -->
   <div class="acciones mt-4 no-print">
-    <button onclick="nuevaFactura()" class="btn btn-outline-danger">
-      Nueva Factura
-    </button>
-
-    <button onclick="guardarHistorial()" class="btn btn-secondary">
-      Guardar Historial
-    </button>
-
-    <button onclick="enviarWhats()" class="btn btn-outline-success">
-      Enviar WhatsApp
-    </button>
-
-    <button onclick="window.print()" class="btn btn-success">
-      Imprimir / PDF
-    </button>
-
-    <button onclick="irAPresupuesto()" class="btn btn-outline-primary">
-      Ir a Presupuesto
-    </button>
+    <button onclick="nuevaFactura()" class="btn btn-outline-danger">Nueva Factura</button>
+    <button onclick="guardarHistorial()" class="btn btn-secondary">Guardar Historial</button>
+    <button onclick="enviarWhats()" class="btn btn-outline-success">Enviar WhatsApp</button>
+    <button onclick="window.print()" class="btn btn-success">Imprimir / PDF</button>
+    <button onclick="irAPresupuesto()" class="btn btn-outline-primary">Ir a Presupuesto</button>
   </div>
 
   <!-- HISTORIAL -->
@@ -206,6 +158,7 @@ body{
         <tr>
           <th>Fecha</th>
           <th>Cliente</th>
+          <th>Detalle</th>
           <th class="text-end">Total</th>
         </tr>
       </thead>
@@ -225,6 +178,7 @@ body{
 
 <script>
 let total = 0;
+let detallesFactura = [];
 
 const cliente = document.getElementById("cliente");
 const fecha = document.getElementById("fecha");
@@ -247,11 +201,13 @@ function agregar(){
   </tr>
  `;
 
+ detallesFactura.push(`${desc.value} ($${importe.toFixed(2)})`);
+
  total += importe;
  document.getElementById("total").innerText = total.toFixed(2);
 
- desc.value = "";
- precio.value = "";
+ desc.value="";
+ precio.value="";
 }
 
 function nuevaFactura(){
@@ -259,6 +215,7 @@ function nuevaFactura(){
  cliente.value="";
  fecha.value="";
  tablaDetalle.innerHTML="";
+ detallesFactura=[];
  total=0;
  document.getElementById("total").innerText="0.00";
 }
@@ -272,11 +229,14 @@ Total: $ ${total.toFixed(2)}`;
 
 function guardarHistorial(){
  let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+
  hist.push({
-  cliente: cliente.value,
   fecha: fecha.value,
+  cliente: cliente.value,
+  detalle: detallesFactura.join(" | "),
   total: total.toFixed(2)
  });
+
  localStorage.setItem("historial", JSON.stringify(hist));
  alert("Comprobante guardado");
  cargarHistorial();
@@ -286,13 +246,16 @@ function cargarHistorial(){
  let hist = JSON.parse(localStorage.getItem("historial") || "[]");
  let tbody = document.querySelector("#tablaHistorial tbody");
  tbody.innerHTML="";
+
  hist.reverse().forEach(h=>{
   tbody.innerHTML += `
    <tr>
     <td>${h.fecha}</td>
     <td>${h.cliente}</td>
+    <td>${h.detalle}</td>
     <td class="text-end">$ ${h.total}</td>
-   </tr>`;
+   </tr>
+  `;
  });
 }
 
@@ -319,4 +282,3 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
-
