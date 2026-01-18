@@ -61,7 +61,6 @@ body{
  margin-top:20px;
 }
 
-/* BOTONES */
 .acciones{
  display:flex;
  gap:10px;
@@ -72,15 +71,11 @@ body{
 @media (max-width:768px){
  .factura-box{padding:20px}
  .encabezado{flex-direction:column;text-align:center}
- .acciones{
-  flex-direction:column;
- }
 }
 
-/* IMPRESIÓN */
 @media print{
  body{background:#fff}
- .no-print, footer, #historialBox, #tablaCarga{display:none!important}
+ .no-print, footer, #historialBox{display:none!important}
  .factura-box{
   box-shadow:none;
   border:none;
@@ -93,6 +88,7 @@ body{
 
 <div class="factura-box">
 
+  <!-- ENCABEZADO -->
   <div class="encabezado">
     <img src="logo.png" alt="Logo">
     <div>
@@ -101,6 +97,7 @@ body{
     </div>
   </div>
 
+  <!-- DATOS -->
   <div class="row g-3 mb-4">
     <div class="col-md-6">
       <input type="text" id="cliente" class="form-control" placeholder="Cliente">
@@ -112,7 +109,6 @@ body{
 
   <!-- CARGA DETALLE -->
   <div id="tablaCarga" class="no-print">
-
     <div class="row g-3 mb-3">
       <div class="col-md-8">
         <input type="text" id="desc" class="form-control" placeholder="Detalle">
@@ -125,20 +121,20 @@ body{
     <button onclick="agregar()" class="btn btn-primary mb-3">
       Agregar
     </button>
-
   </div>
 
-  <!-- TABLA FINAL SOLO PARA IMPRESIÓN -->
-  <table class="table table-bordered">
-    <thead class="table-dark">
+  <!-- TABLA DETALLE -->
+  <table class="table table-bordered mt-4">
+    <thead class="table-light">
       <tr>
         <th>Detalle</th>
         <th class="text-end">Importe</th>
       </tr>
     </thead>
-    <tbody id="tablaPrint"></tbody>
+    <tbody id="tablaDetalle"></tbody>
   </table>
 
+  <!-- TOTAL -->
   <div class="total-box text-end">
     TOTAL $ <span id="total">0.00</span>
   </div>
@@ -156,16 +152,14 @@ body{
     <button onclick="enviarWhats()" class="btn btn-outline-success">
       Enviar WhatsApp
     </button>
-   
+
     <button onclick="window.print()" class="btn btn-success">
       Imprimir / PDF
     </button>
-   
+
     <button onclick="irAPresupuesto()" class="btn btn-outline-primary">
       Ir a Presupuesto
     </button>
-
-    
   </div>
 
   <!-- HISTORIAL -->
@@ -203,6 +197,7 @@ const cliente = document.getElementById("cliente");
 const fecha = document.getElementById("fecha");
 const desc = document.getElementById("desc");
 const precio = document.getElementById("precio");
+const tablaDetalle = document.getElementById("tablaDetalle");
 
 function agregar(){
  if(desc.value === "" || precio.value === ""){
@@ -210,8 +205,16 @@ function agregar(){
   return;
  }
 
- total += parseFloat(precio.value);
+ let importe = parseFloat(precio.value);
 
+ tablaDetalle.innerHTML += `
+  <tr>
+   <td>${desc.value}</td>
+   <td class="text-end">$ ${importe.toFixed(2)}</td>
+  </tr>
+ `;
+
+ total += importe;
  document.getElementById("total").innerText = total.toFixed(2);
 
  desc.value = "";
@@ -222,6 +225,7 @@ function nuevaFactura(){
  if(!confirm("¿Desea iniciar una nueva factura?")) return;
  cliente.value="";
  fecha.value="";
+ tablaDetalle.innerHTML="";
  total=0;
  document.getElementById("total").innerText="0.00";
 }
@@ -233,19 +237,52 @@ Total: $ ${total.toFixed(2)}`;
  window.open("https://wa.me/?text="+encodeURIComponent(msg));
 }
 
+function guardarHistorial(){
+ let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ hist.push({
+  cliente: cliente.value,
+  fecha: fecha.value,
+  total: total.toFixed(2)
+ });
+ localStorage.setItem("historial", JSON.stringify(hist));
+ alert("Comprobante guardado");
+ cargarHistorial();
+}
+
+function cargarHistorial(){
+ let hist = JSON.parse(localStorage.getItem("historial") || "[]");
+ let tbody = document.querySelector("#tablaHistorial tbody");
+ tbody.innerHTML="";
+ hist.reverse().forEach(h=>{
+  tbody.innerHTML += `
+   <tr>
+    <td>${h.fecha}</td>
+    <td>${h.cliente}</td>
+    <td class="text-end">$ ${h.total}</td>
+   </tr>`;
+ });
+}
+
+function filtrarHistorial(){
+ let q = buscar.value.toLowerCase();
+ let t = document.getElementById("tablaHistorial");
+ if(q===""){t.classList.add("d-none");return;}
+ t.classList.remove("d-none");
+ document.querySelectorAll("#tablaHistorial tbody tr").forEach(f=>{
+  f.style.display = f.innerText.toLowerCase().includes(q) ? "" : "none";
+ });
+}
+
+function irAPresupuesto(){
+ window.location.href = "presupuesto.html";
+}
+
+window.onload = cargarHistorial;
+
 if('serviceWorker' in navigator){
  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
-
 </body>
 </html>
-
-
-
-
-
-
-
-
