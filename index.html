@@ -142,6 +142,7 @@ body{
   <div class="acciones mt-4 no-print">
     <button onclick="nuevaFactura()" class="btn btn-outline-danger">Nueva Factura</button>
     <button onclick="guardarHistorial()" class="btn btn-secondary">Guardar Historial</button>
+    <button class="btn btn-danger" onclick="eliminarHistorial()">Eliminar historial</button>
     <button onclick="enviarWhats()" class="btn btn-outline-success">Enviar WhatsApp</button>
     <button onclick="window.print()" class="btn btn-success">Imprimir / PDF</button>
     <button onclick="irAPresupuesto()" class="btn btn-outline-primary">Ir a Presupuesto</button>
@@ -243,6 +244,17 @@ function guardarHistorial(){
  cargarHistorial();
 }
 
+function eliminarHistorial(){
+ if(!confirm("¿Seguro que desea eliminar todo el historial?")) return;
+
+ localStorage.removeItem("historial");
+
+ let tbody = document.querySelector("#tablaHistorial tbody");
+ if(tbody) tbody.innerHTML = "";
+
+ alert("Historial eliminado correctamente");
+}
+
 function cargarHistorial(){
  let hist = JSON.parse(localStorage.getItem("historial") || "[]");
  let tbody = document.querySelector("#tablaHistorial tbody");
@@ -283,5 +295,6 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
 
 
