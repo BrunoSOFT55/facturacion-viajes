@@ -201,7 +201,8 @@ function agregar(){
   </tr>
  `;
 
- detallesFactura.push(`${desc.value} ($${importe.toFixed(2)})`);
+ // SOLO DETALLE (sin importe)
+ detallesFactura.push(desc.value);
 
  total += importe;
  document.getElementById("total").innerText = total.toFixed(2);
@@ -282,3 +283,5 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
+
