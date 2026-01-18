@@ -199,36 +199,29 @@ body{
 <script>
 let total = 0;
 
-function irAPresupuesto(){
- window.location.href = "presupuesto.html";
-}
+const cliente = document.getElementById("cliente");
+const fecha = document.getElementById("fecha");
+const desc = document.getElementById("desc");
+const precio = document.getElementById("precio");
 
 function agregar(){
- if(!desc.value || !precio.value) return;
- let p = parseFloat(precio.value);
- total += p;
+ if(desc.value === "" || precio.value === ""){
+  alert("Complete el detalle y el importe");
+  return;
+ }
 
- let fila = `
-  <tr>
-   <td>${desc.value}</td>
-   <td class="text-end">$ ${p.toFixed(2)}</td>
-  </tr>
- `;
-
- tabla.innerHTML += fila;
- tablaPrint.innerHTML += fila;
+ total += parseFloat(precio.value);
 
  document.getElementById("total").innerText = total.toFixed(2);
- desc.value="";
- precio.value="";
+
+ desc.value = "";
+ precio.value = "";
 }
 
 function nuevaFactura(){
  if(!confirm("¿Desea iniciar una nueva factura?")) return;
  cliente.value="";
  fecha.value="";
- tabla.innerHTML="";
- tablaPrint.innerHTML="";
  total=0;
  document.getElementById("total").innerText="0.00";
 }
@@ -240,51 +233,15 @@ Total: $ ${total.toFixed(2)}`;
  window.open("https://wa.me/?text="+encodeURIComponent(msg));
 }
 
-function guardarHistorial(){
- let hist = JSON.parse(localStorage.getItem("historial")||"[]");
- hist.push({
-  cliente:cliente.value,
-  fecha:fecha.value,
-  total:total.toFixed(2)
- });
- localStorage.setItem("historial",JSON.stringify(hist));
- alert("Comprobante guardado");
- cargarHistorial();
-}
-
-function cargarHistorial(){
- let hist = JSON.parse(localStorage.getItem("historial")||"[]");
- let tbody = document.querySelector("#tablaHistorial tbody");
- tbody.innerHTML="";
- hist.reverse().forEach(h=>{
-  tbody.innerHTML += `
-   <tr>
-    <td>${h.fecha}</td>
-    <td>${h.cliente}</td>
-    <td class="text-end">$ ${h.total}</td>
-   </tr>`;
- });
-}
-
-function filtrarHistorial(){
- let q = buscar.value.toLowerCase();
- let t = document.getElementById("tablaHistorial");
- if(q===""){t.classList.add("d-none");return;}
- t.classList.remove("d-none");
- document.querySelectorAll("#tablaHistorial tbody tr").forEach(f=>{
-  f.style.display = f.innerText.toLowerCase().includes(q) ? "" : "none";
- });
-}
-
-window.onload = cargarHistorial;
-
 if('serviceWorker' in navigator){
  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
+
 </body>
 </html>
+
 
 
 
