@@ -88,6 +88,23 @@ input, textarea{
     padding:0;
   }
 }
+
+  @media print {
+  @page {
+    margin: 0; /* elimina los márgenes de impresión que el navegador pone por defecto */
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .documento {
+    margin: 0;
+    box-shadow: none;
+    width: 100%;
+  }
+}
+  
 </style>
 </head>
 
@@ -149,6 +166,7 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
 
 
 
