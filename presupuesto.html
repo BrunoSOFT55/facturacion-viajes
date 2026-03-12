@@ -25,9 +25,22 @@ body{
 }
 
 /* Encabezado */
+.encabezado-img{
+  position: relative;
+  text-align: center;
+}
 .encabezado-img img{
   width:100%;
   display:block;
+}
+.encabezado-img .titulo-modulo{
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #0b1f3a;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 /* Contenido */
@@ -59,69 +72,48 @@ input, textarea{
 /* ========= CONFIGURACIÓN A4 ========= */
 @page{
   size:A4;
-  margin:2.5cm;
+  margin:0 1.5cm; /* solo márgenes laterales */
 }
 
 /* ========= MODO IMPRESIÓN ========= */
 @media print{
-  body{background:#fff}
-
+  body{background:#fff; margin:0;}
   .documento{
     max-width:100%;
-    margin:0;
+    margin:0 auto;
     box-shadow:none;
+    width:100%;
   }
 
-   .contenido {
-    padding: 0;
-    font-size: 12pt;
-    line-height: 1.6;
-  }
+  /* Ocultar botones */
+  .btn-imprimir{ display:none; }
 
-  .btn-imprimir{
-    display:none;
-  }
-
+  /* Mostrar contenido del textarea como texto normal */
   textarea, input{
     border:none;
     resize:none;
     padding:0;
+    width:100%;
+    background:transparent;
+    box-shadow:none;
+    font-family:inherit;
+    font-size:12pt;
+    line-height:1.6;
+  }
+
+  /* Mantener saltos de línea del textarea */
+  textarea{
+    white-space: pre-wrap;
+    height:auto;
+    overflow:visible;
+  }
+
+  .contenido{
+    padding:0;
+    font-size:12pt;
+    line-height:1.6;
   }
 }
-@media print {
-  @page {
-    size:A4;
-    margin: 0 1.5cm 0 1.5cm; /* arriba derecha abajo izquierda */
-  }
-
-  body {
-    margin: 0;
-  }
-
-  .documento {
-    margin: 0 auto; /* centra el documento */
-    box-shadow: none;
-    width: 100%;
-  }
-
-  /* resto de tus estilos de impresión */
-  .contenido {
-    padding: 0;
-    font-size: 12pt;
-    line-height: 1.6;
-  }
-
-  .btn-imprimir {
-    display: none;
-  }
-
-  textarea, input {
-    border: none;
-    resize: none;
-    padding: 0;
-  }
-}
-  
 </style>
 </head>
 
@@ -130,6 +122,7 @@ input, textarea{
 <div class="documento">
 
   <div class="encabezado-img">
+    <span class="titulo-modulo">Presupuesto</span>
     <img src="solapa_new01.jpeg" alt="Altamirano Nosiglia Viajes">
   </div>
 
@@ -183,18 +176,5 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
