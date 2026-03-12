@@ -88,10 +88,9 @@ input, textarea{
     padding:0;
   }
 }
-
-  @media print {
+@media print {
   @page {
-    margin: 0; /* elimina los márgenes de impresión que el navegador pone por defecto */
+    margin: 1.5cm; /* márgenes laterales y superior/inferior */
   }
 
   body {
@@ -99,9 +98,26 @@ input, textarea{
   }
 
   .documento {
-    margin: 2,5;
+    margin: 0 auto; /* centra el documento */
     box-shadow: none;
-    width: 90%;
+    width: 100%;
+  }
+
+  /* resto de tus estilos de impresión */
+  .contenido {
+    padding: 0;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  .btn-imprimir {
+    display: none;
+  }
+
+  textarea, input {
+    border: none;
+    resize: none;
+    padding: 0;
   }
 }
   
@@ -166,6 +182,7 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
 
 
 
