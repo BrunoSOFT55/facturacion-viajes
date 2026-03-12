@@ -56,12 +56,12 @@ input, textarea{
 @media print {
   body { background:#fff; margin:0; }
   .documento { max-width:100%; margin:0 auto; box-shadow:none; width:100%; }
-  
-  /* Ocultar botones y formularios */
-  .btn-imprimir, input, textarea { display:none; }
 
-  /* Mostrar el contenido del presupuesto como texto normal */
-  .contenido-print { display:block; white-space: pre-wrap; font-size:12pt; line-height:1.6; }
+  /* Ocultar todos los elementos de pantalla */
+  .pantalla { display:none; }
+
+  /* Mostrar solo el div de impresión */
+  .imprimir { display:block; }
 
   /* Márgenes laterales */
   @page { margin:0 1.5cm; }
@@ -84,22 +84,20 @@ input, textarea{
     <div class="row mb-3 pantalla">
       <div class="col-md-6">
         <strong>Cliente:</strong>
-        <input type="text" class="form-control" id="cliente">
+        <input type="text" id="cliente" class="form-control">
       </div>
-
-      <div class="col-md-3">
+      <div class="col-md-3 pantalla">
         <strong>Fecha:</strong>
-        <input type="date" class="form-control" id="fecha">
+        <input type="date" id="fecha" class="form-control">
       </div>
-
-      <div class="col-md-3">
+      <div class="col-md-3 pantalla">
         <strong>Presupuesto N°</strong>
-        <input type="text" class="form-control" id="numero" placeholder="00000">
+        <input type="text" id="numero" class="form-control" placeholder="00000">
       </div>
     </div>
 
     <div class="mb-4 pantalla">
-      <textarea class="form-control" rows="7" id="detalle"></textarea>
+      <textarea id="detalle" class="form-control" rows="7"></textarea>
     </div>
 
     <p class="text-center mt-4 pantalla">
@@ -107,7 +105,7 @@ input, textarea{
     </p>
 
     <!-- Botones -->
-    <div class="btn-imprimir acciones mt-4">
+    <div class="btn-imprimir acciones mt-4 pantalla">
       <button onclick="window.location.href='index.html'" class="btn btn-outline-secondary">
         ← Volver a Comprobantes
       </button>
@@ -118,29 +116,34 @@ input, textarea{
     </div>
 
     <!-- Contenido solo para impresión -->
-    <div class="contenido-print" id="printArea" style="display:none;"></div>
+    <div class="imprimir" id="printArea" style="display:none;"></div>
 
   </div>
 </div>
 
 <script>
 function prepararImpresion() {
-  // Copiar valores de los inputs y textarea al div de impresión
-  let cliente = document.getElementById('cliente').value;
-  let fecha = document.getElementById('fecha').value;
-  let numero = document.getElementById('numero').value;
-  let detalle = document.getElementById('detalle').value;
+  const cliente = document.getElementById('cliente').value || '';
+  const fecha = document.getElementById('fecha').value || '';
+  const numero = document.getElementById('numero').value || '';
+  const detalle = document.getElementById('detalle').value || '';
 
-  let printDiv = document.getElementById('printArea');
+  const printDiv = document.getElementById('printArea');
   printDiv.innerHTML = `
     <p><strong>Cliente:</strong> ${cliente}</p>
     <p><strong>Fecha:</strong> ${fecha}</p>
     <p><strong>Presupuesto N°:</strong> ${numero}</p>
-    <p>${detalle}</p>
+    <p>${detalle.replace(/\n/g,'<br>')}</p>
     <p class="text-center mt-4"><strong>GRACIAS POR SU CONFIANZA</strong></p>
   `;
 
+  // Mostrar el div de impresión y ocultar elementos de pantalla
+  printDiv.style.display = 'block';
+
   window.print();
+
+  // Restaurar después de imprimir
+  printDiv.style.display = 'none';
 }
 </script>
 
