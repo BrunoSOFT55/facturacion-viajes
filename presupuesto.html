@@ -5,10 +5,6 @@
 <title>Presupuesto</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b1f3a">
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -25,22 +21,9 @@ body{
 }
 
 /* Encabezado */
-.encabezado-img{
-  position: relative;
-  text-align: center;
-}
 .encabezado-img img{
   width:100%;
   display:block;
-}
-.encabezado-img .titulo-modulo{
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #0b1f3a;
-  font-size: 28px;
-  font-weight: bold;
 }
 
 /* Contenido */
@@ -54,7 +37,7 @@ input, textarea{
   border:1px solid #ccc;
 }
 
-/* ========= BOTONES MEJORADOS ========= */
+/* Botones */
 .acciones{
   display:flex;
   justify-content:center;
@@ -69,50 +52,19 @@ input, textarea{
   font-size:15px;
 }
 
-/* ========= CONFIGURACIÓN A4 ========= */
-@page{
-  size:A4;
-  margin:0 1.5cm; /* solo márgenes laterales */
-}
+/* Impresión */
+@media print {
+  body { background:#fff; margin:0; }
+  .documento { max-width:100%; margin:0 auto; box-shadow:none; width:100%; }
+  
+  /* Ocultar botones y formularios */
+  .btn-imprimir, input, textarea { display:none; }
 
-/* ========= MODO IMPRESIÓN ========= */
-@media print{
-  body{background:#fff; margin:0;}
-  .documento{
-    max-width:100%;
-    margin:0 auto;
-    box-shadow:none;
-    width:100%;
-  }
+  /* Mostrar el contenido del presupuesto como texto normal */
+  .contenido-print { display:block; white-space: pre-wrap; font-size:12pt; line-height:1.6; }
 
-  /* Ocultar botones */
-  .btn-imprimir{ display:none; }
-
-  /* Mostrar contenido del textarea como texto normal */
-  textarea, input{
-    border:none;
-    resize:none;
-    padding:0;
-    width:100%;
-    background:transparent;
-    box-shadow:none;
-    font-family:inherit;
-    font-size:12pt;
-    line-height:1.6;
-  }
-
-  /* Mantener saltos de línea del textarea */
-  textarea{
-    white-space: pre-wrap;
-    height:auto;
-    overflow:visible;
-  }
-
-  .contenido{
-    padding:0;
-    font-size:12pt;
-    line-height:1.6;
-  }
+  /* Márgenes laterales */
+  @page { margin:0 1.5cm; }
 }
 </style>
 </head>
@@ -121,60 +73,76 @@ input, textarea{
 
 <div class="documento">
 
+  <!-- Encabezado: solo la imagen -->
   <div class="encabezado-img">
-    <span class="titulo-modulo">Presupuesto</span>
     <img src="solapa_new01.jpeg" alt="Altamirano Nosiglia Viajes">
   </div>
 
   <div class="contenido">
 
-    <div class="row mb-3">
+    <!-- Formulario en pantalla -->
+    <div class="row mb-3 pantalla">
       <div class="col-md-6">
         <strong>Cliente:</strong>
-        <input type="text" class="form-control">
+        <input type="text" class="form-control" id="cliente">
       </div>
 
       <div class="col-md-3">
         <strong>Fecha:</strong>
-        <input type="date" class="form-control">
+        <input type="date" class="form-control" id="fecha">
       </div>
 
       <div class="col-md-3">
         <strong>Presupuesto N°</strong>
-        <input type="text" class="form-control" placeholder="00000">
+        <input type="text" class="form-control" id="numero" placeholder="00000">
       </div>
     </div>
 
-    <div class="mb-4">
-      <textarea class="form-control" rows="7"></textarea>
+    <div class="mb-4 pantalla">
+      <textarea class="form-control" rows="7" id="detalle"></textarea>
     </div>
 
-    <p class="text-center mt-4">
+    <p class="text-center mt-4 pantalla">
       <strong>GRACIAS POR SU CONFIANZA</strong>
     </p>
 
-    <!-- BOTONES -->
+    <!-- Botones -->
     <div class="btn-imprimir acciones mt-4">
       <button onclick="window.location.href='index.html'" class="btn btn-outline-secondary">
         ← Volver a Comprobantes
       </button>
 
-      <button onclick="window.print()" class="btn btn-primary">
+      <button onclick="prepararImpresion()" class="btn btn-primary">
         🖨 Imprimir Presupuesto
       </button>
     </div>
 
+    <!-- Contenido solo para impresión -->
+    <div class="contenido-print" id="printArea" style="display:none;"></div>
+
   </div>
 </div>
 
-<!-- SERVICE WORKER -->
 <script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('service-worker.js');
+function prepararImpresion() {
+  // Copiar valores de los inputs y textarea al div de impresión
+  let cliente = document.getElementById('cliente').value;
+  let fecha = document.getElementById('fecha').value;
+  let numero = document.getElementById('numero').value;
+  let detalle = document.getElementById('detalle').value;
+
+  let printDiv = document.getElementById('printArea');
+  printDiv.innerHTML = `
+    <p><strong>Cliente:</strong> ${cliente}</p>
+    <p><strong>Fecha:</strong> ${fecha}</p>
+    <p><strong>Presupuesto N°:</strong> ${numero}</p>
+    <p>${detalle}</p>
+    <p class="text-center mt-4"><strong>GRACIAS POR SU CONFIANZA</strong></p>
+  `;
+
+  window.print();
 }
 </script>
 
 </body>
 </html>
-
-
