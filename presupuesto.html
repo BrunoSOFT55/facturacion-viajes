@@ -53,6 +53,7 @@ input, textarea{
 }
 
 /* Impresión */
+/* Impresión */
 @media print {
   body { background:#fff; margin:0; }
   .documento { max-width:100%; margin:0 auto; box-shadow:none; width:100%; }
@@ -65,6 +66,13 @@ input, textarea{
 
   /* Márgenes laterales */
   @page { margin:0 1.5cm; }
+
+  /* NUEVO: Fuente Arial 12pt e interlineado 1,5 */
+  #printArea {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
 }
 </style>
 </head>
@@ -149,3 +157,4 @@ function prepararImpresion() {
 
 </body>
 </html>
+
